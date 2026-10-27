@@ -11,7 +11,9 @@
 :root{--bg:#f3efe9;--fg:#1c1a19;--mute:#8d8781;--line:#e2dbd2;--red:#a8231f;--ch:#a8231f;
  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;--sans:Montserrat,-apple-system,system-ui,Segoe UI,Roboto,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{min-height:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{overflow-x:hidden}
+body{overflow-x:clip}
+html,body{min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 #sBody{padding-right:6px}
 body{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") fixed;color:var(--fg);font-family:var(--sans);font-size:15px}
 .glass{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 30px rgba(60,40,30,.10),inset 0 1px 0 #fff}
@@ -49,7 +51,8 @@ h1{font-family:var(--serif);font-size:30px;font-weight:600;flex:1;letter-spacing
 .tabbar button.on{color:var(--red)}
 .bar{position:sticky;top:0;z-index:3;display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;align-items:center;padding:10px 18px;margin:-18px -18px 12px;background:rgba(243,239,233,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .bar::-webkit-scrollbar{display:none}
-.bar button{flex:none;padding:7px 11px;font-size:13px}
+.bar button{flex:none;height:46px;padding:0 18px;font-size:15px}
+.bar button:first-child{width:52px;height:52px;padding:0;font-size:22px}
 #vSong .bar button{min-width:36px;padding:7px 9px}
 .bar .sp{flex:1}
 .lbl{color:var(--mute);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:18px 0 8px;border-bottom:1px solid var(--line)}
@@ -101,6 +104,16 @@ label{display:block;color:var(--mute);font-size:12px;letter-spacing:1.2px;text-t
 .scr .sp-b{display:none;width:40px;height:40px;font-size:22px;padding:0;color:var(--fg)}
 .scr.on .sp-b{display:block}
 .scr .lv{display:none}
+.sbar{position:sticky;top:0;z-index:3;margin:-18px -18px 14px;padding:10px 14px 10px;background:rgba(243,239,233,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.srow{display:flex;align-items:center;gap:10px}
+.bigb{width:52px;height:52px;flex:none;padding:0;display:flex;align-items:center;justify-content:center}
+.bigb svg{width:26px;height:26px;stroke:var(--fg);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.stit{flex:1;min-width:0;text-align:center;font-family:var(--serif);font-size:19px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
+.stit.on{opacity:1}
+.tools{display:flex;align-items:center;gap:6px;margin-top:10px}
+.tools button{flex:1;min-width:0;height:44px;padding:0;font-size:15px}
+.tools .key{min-width:44px;text-align:center}
+.tools .gap{width:4px;flex:none}
 .chk{width:26px;text-align:center;color:var(--red);font-weight:700;font-size:18px}
 audio{filter:sepia(.15)}
 </style>
@@ -142,17 +155,22 @@ audio{filter:sepia(.15)}
 
 <!-- ПРОСМОТР ПЕСНИ -->
 <div id="vSong" class="view">
-  <div class="bar">
-    <button onclick="back()">←</button>
-    <button onclick="openSeqSheet()">☰</button>
-    <button onclick="openEdit(cur)">✎</button>
-    <button onclick="tr(-1)">−½</button>
-    <span class="key" id="sKey">—</span>
-    <button onclick="tr(1)">+½</button>
-    <span class="sp"></span>
-    <button onclick="fs(-1)">A−</button>
-    <button onclick="fs(1)">A+</button>
-    <button id="bCh" onclick="toggleCh()">♪</button>
+  <div class="sbar">
+    <div class="srow">
+      <button class="bigb" onclick="back()" aria-label="Назад"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="stit" id="sMini"></div>
+      <button class="bigb" onclick="openSeqSheet()" aria-label="Список"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+    <div class="tools">
+      <button onclick="tr(-1)">−½</button>
+      <span class="key" id="sKey">—</span>
+      <button onclick="tr(1)">+½</button>
+      <span class="gap"></span>
+      <button onclick="fs(-1)">A−</button>
+      <button onclick="fs(1)">A+</button>
+      <button id="bCh" onclick="toggleCh()">♪</button>
+      <button onclick="openEdit(cur)">✎</button>
+    </div>
   </div>
   <div id="scr" class="scr glass"><button class="sp-b" onclick="spd(-1)">−</button><button id="bScroll" class="go" onclick="toggleScroll()"><svg viewBox="0 0 24 24"><path d="M12 4v13M6 12l6 6 6-6"/></svg></button><button class="sp-b" onclick="spd(1)">+</button></div>
   <div id="sBlock" class="gh" style="margin-top:0"></div>
@@ -328,7 +346,7 @@ function renderSong(){
   const sq=seqOf(ctx),pos=sq.findIndex(x=>x.id===cur);
   delete $('sBlock').dataset.o;clearTimeout(flashSpd.t);
   $('sBlock').textContent=ctx&&pos>=0?`${sq[pos].block} · ${pos+1}/${sq.length}`:'';
-  $('sTitle').textContent=s.title||'Без названия';
+  $('sTitle').textContent=s.title||'Без названия';$('sMini').textContent=s.title||'';
   $('sMeta').textContent=[s.artist,s.bpm?s.bpm+' bpm':''].filter(Boolean).join(' · ');
   $('sNotes').textContent=s.notes||'';$('sNotes').style.display=s.notes?'':'none';
   const au=$('sAudio');
@@ -383,6 +401,7 @@ function startScroll(){$('bScroll').classList.add('on');$('scr').classList.add('
 function stopScroll(){cancelAnimationFrame(scrollT);scrollT=null;const b=$('bScroll');if(!b)return;b.classList.remove('on');$('scr').classList.remove('on');b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 4v13M6 12l6 6 6-6"/></svg>'}
 function spd(d){speed=Math.max(1,Math.min(10,speed+d));lsSet('setlist_speed',speed);flashSpd()}
 function flashSpd(){const b=$('sBlock');const o=b.dataset.o??b.textContent;b.dataset.o=o;b.textContent='Скорость '+speed+' / 10';clearTimeout(flashSpd.t);flashSpd.t=setTimeout(()=>{b.textContent=b.dataset.o;delete b.dataset.o},1200)}
+addEventListener('scroll',()=>{const m=$('sMini');m&&m.classList.toggle('on',scrollY>90)},{passive:true});
 addEventListener('touchstart',e=>{if(scrollT&&!e.target.closest('#scr'))stopScroll()},{passive:true});
 async function keepAwake(){try{lock=await navigator.wakeLock.request('screen')}catch(e){}}
 function releaseLock(){try{lock&&lock.release()}catch(e){}lock=null}
