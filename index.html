@@ -4,7 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#f3efe9">
-<title>SETLIST</title>
+<title>Setlist</title>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Setlist">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -26,7 +34,7 @@ textarea{min-height:45vh;font-family:ui-monospace,Menlo,monospace;font-size:14px
 .view{display:none;padding:18px 18px 150px;max-width:720px;margin:0 auto}
 .view.on{display:block}
 header{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.logo{width:38px;height:38px;border-radius:50%;background:var(--fg);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.logo{width:42px;height:42px;border-radius:12px;object-fit:cover;box-shadow:0 2px 8px rgba(60,40,30,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
 h1{font-family:var(--serif);font-size:30px;font-weight:600;flex:1;letter-spacing:.2px}
 .hero{text-align:center;margin:10px 0 18px}
 .big{font-family:var(--serif);color:var(--red);font-size:110px;line-height:.95;font-weight:500;letter-spacing:-2px}
@@ -122,7 +130,7 @@ audio{filter:sepia(.15)}
 
 <!-- БИБЛИОТЕКА -->
 <div id="vLib" class="view">
-  <header><span class="logo">♪</span><h1>setlist</h1>
+  <header><img class="logo" src="icons/icon-192.png" alt=""><h1>setlist</h1>
     <button onclick="exportData()">⇩</button>
     <button onclick="$('imp').click()">⇧</button>
     <input type="file" id="imp" accept=".json" hidden onchange="importData(this)">
@@ -134,7 +142,7 @@ audio{filter:sepia(.15)}
 
 <!-- ВЫСТУПЛЕНИЯ -->
 <div id="vEvents" class="view">
-  <header><span class="logo">♪</span><h1>Выступления</h1></header>
+  <header><img class="logo" src="icons/icon-192.png" alt=""><h1>Выступления</h1></header>
   <div class="lbl">Мероприятия</div><div id="evs" style="margin-top:12px"></div>
   <button class="fab glass" onclick="newEvent()">+ выступление</button>
 </div>
@@ -203,7 +211,7 @@ audio{filter:sepia(.15)}
 
 <!-- ОТКРЫТО ПО ССЫЛКЕ -->
 <div id="vShare" class="view">
-  <header><span class="logo">♪</span><h1>setlist</h1></header>
+  <header><img class="logo" src="icons/icon-192.png" alt=""><h1>setlist</h1></header>
   <div class="hero"><div class="big" id="shN">00</div><div class="sub" id="shTitle"></div><div class="sub2" id="shDate"></div></div>
   <div id="shBody"></div>
   <div class="btns"><button onclick="saveShared()">Сохранить себе</button><button onclick="leaveShare()">Мои песни</button></div>
