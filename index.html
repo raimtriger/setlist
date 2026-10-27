@@ -75,6 +75,8 @@ h1{font-family:var(--serif);font-size:30px;font-weight:600;flex:1;letter-spacing
 .sg{display:inline-flex;flex-direction:column;white-space:pre}
 .sg i{font-style:normal;color:var(--ch);font-weight:600;font-size:.82em;min-height:1.15em;padding-right:.3em}
 .hide-ch .sg i{display:none}
+.pl{margin:0 0 .45em;white-space:pre-wrap;overflow-wrap:anywhere}
+#sBody{overflow-wrap:anywhere}
 .sec{color:var(--mute);font-size:.68em;letter-spacing:1.5px;text-transform:uppercase;margin:1.1em 0 .4em;border-bottom:1px solid var(--line);padding-bottom:.4em}
 .notes{color:var(--mute);border-left:2px solid var(--red);padding-left:12px;margin-bottom:16px;white-space:pre-wrap;font-family:var(--serif);font-size:18px}
 .nav{display:flex;gap:8px;margin-top:28px}.nav button{flex:1;padding:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif);font-size:18px;font-weight:600}
@@ -90,6 +92,14 @@ label{display:block;color:var(--mute);font-size:12px;letter-spacing:1.2px;text-t
 .gh{color:var(--mute);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:16px 0 8px;border-bottom:1px solid var(--line)}
 #sBlock{padding-top:0;border:none}
 .dot{width:9px;height:9px;border-radius:50%;background:#2fbf5b;box-shadow:0 0 0 3px rgba(47,191,91,.18),0 0 8px rgba(47,191,91,.7);flex:none}
+.scr{position:fixed;right:16px;bottom:24px;z-index:6;display:flex;align-items:center;gap:2px;border-radius:999px;padding:5px}
+.scr button{background:none;border:none;box-shadow:none}
+.scr .go{width:56px;height:56px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center;background:var(--fg);color:#fff}
+.scr .go svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.scr .go.on{background:var(--red)}
+.scr .sp-b{display:none;width:40px;height:40px;font-size:22px;padding:0;color:var(--fg)}
+.scr.on .sp-b{display:block}
+.scr .lv{display:none}
 .chk{width:26px;text-align:center;color:var(--red);font-weight:700;font-size:18px}
 audio{filter:sepia(.15)}
 </style>
@@ -142,8 +152,8 @@ audio{filter:sepia(.15)}
     <button onclick="fs(-1)">A−</button>
     <button onclick="fs(1)">A+</button>
     <button id="bCh" onclick="toggleCh()">♪</button>
-    <button id="bScroll" onclick="toggleScroll()">▶</button>
   </div>
+  <div id="scr" class="scr glass"><button class="sp-b" onclick="spd(-1)">−</button><button id="bScroll" class="go" onclick="toggleScroll()"><svg viewBox="0 0 24 24"><path d="M12 4v13M6 12l6 6 6-6"/></svg></button><button class="sp-b" onclick="spd(1)">+</button></div>
   <div id="sBlock" class="gh" style="margin-top:0"></div>
   <div id="sTitle"></div>
   <div id="sMeta"></div>
@@ -228,7 +238,7 @@ function go(v){
 function row(s,i,extra,cls){
   return`<div class="song ${cls||''}">${i!=null?`<span class="n">${i}</span>`:''}
    <div class="t" onclick="${extra.click}"><b>${esc(s.title)||'Без названия'}</b><small>${esc(s.artist)}${s.bpm?' · '+esc(s.bpm)+' bpm':''}</small></div>
-   ${(s.text||'').trim()?'<span class="dot" title="Есть текст"></span>':''}${s.audio?'<span class="mute">♫</span>':''}${s.key?`<span class="key">${esc(s.k||s.key)}</span>`:''}${extra.tail||''}</div>`;
+   ${s.audio?'<span class="mute">♫</span>':''}${s.key?`<span class="key">${esc(s.k||s.key)}</span>`:''}${extra.tail||''}</div>`;
 }
 
 /* ---- БИБЛИОТЕКА ---- */
@@ -315,6 +325,7 @@ function back(){ctx?openEvent(ctx):go('vLib')}
 function renderSong(){
   const s=byId(cur);if(!s)return back();
   const sq=seqOf(ctx),pos=sq.findIndex(x=>x.id===cur);
+  delete $('sBlock').dataset.o;clearTimeout(flashSpd.t);
   $('sBlock').textContent=ctx&&pos>=0?`${sq[pos].block} · ${pos+1}/${sq.length}`:'';
   $('sTitle').textContent=s.title||'Без названия';
   $('sMeta').textContent=[s.artist,s.bpm?s.bpm+' bpm':''].filter(Boolean).join(' · ');
@@ -329,11 +340,14 @@ function renderSong(){
     const t=line.trim(),sec=t.match(/^\[([^\]]+)\]$/);
     if(sec&&!isChord(sec[1]))return`<div class="sec">${esc(sec[1])}</div>`;
     if(!t)return'<div class="ln">&nbsp;</div>';
+    if(!/\[[^\]]+\]/.test(line))return`<div class="pl">${esc(line)}</div>`;
     let out='',ch='';
     for(const p of line.split(/(\[[^\]]+\])/)){
       const m=p.match(/^\[([^\]]+)\]$/);
       if(m){if(ch)out+=seg(ch,' ');ch=trChord(m[1],shift);continue}
-      if(p===''&&!ch)continue;out+=seg(ch,p);ch='';
+      if(p===''&&!ch)continue;
+      const parts=p.split(/(?<=\s)/);
+      parts.forEach((w,i)=>{out+=seg(i===0?ch:'',w)});ch='';
     }
     if(ch)out+=seg(ch,' ');return`<div class="ln">${out}</div>`;
   }).join('')||'<div class="mute" style="font-size:15px">Текста пока нет — жми ✎</div>';
@@ -360,9 +374,15 @@ function renderSeqSheet(){
 
 /* автоскролл и экран */
 function toggleScroll(){scrollT?stopScroll():startScroll()}
-function startScroll(){$('bScroll').textContent='❚❚';$('bScroll').classList.add('on-b');
-  scrollT=setInterval(()=>{scrollBy(0,1);if(innerHeight+scrollY>=document.body.scrollHeight-2)stopScroll()},60)}
-function stopScroll(){clearInterval(scrollT);scrollT=null;const b=$('bScroll');b.textContent='▶';b.classList.remove('on-b')}
+let speed=parseInt(lsGet('setlist_speed'))||3,acc=0,lastT=0;
+const PX=[0,8,12,17,23,30,38,48,60,75,95];
+function scrollLoop(t){if(!scrollT)return;if(lastT){acc+=PX[speed]*(t-lastT)/1000;const n=Math.floor(acc);if(n){scrollBy(0,n);acc-=n}}lastT=t;
+  if(innerHeight+scrollY>=document.documentElement.scrollHeight-2)return stopScroll();scrollT=requestAnimationFrame(scrollLoop)}
+function startScroll(){$('bScroll').classList.add('on');$('scr').classList.add('on');$('bScroll').innerHTML='<svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>';lastT=0;acc=0;scrollT=requestAnimationFrame(scrollLoop);flashSpd()}
+function stopScroll(){cancelAnimationFrame(scrollT);scrollT=null;const b=$('bScroll');if(!b)return;b.classList.remove('on');$('scr').classList.remove('on');b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 4v13M6 12l6 6 6-6"/></svg>'}
+function spd(d){speed=Math.max(1,Math.min(10,speed+d));lsSet('setlist_speed',speed);flashSpd()}
+function flashSpd(){const b=$('sBlock');const o=b.dataset.o??b.textContent;b.dataset.o=o;b.textContent='Скорость '+speed+' / 10';clearTimeout(flashSpd.t);flashSpd.t=setTimeout(()=>{b.textContent=b.dataset.o;delete b.dataset.o},1200)}
+addEventListener('touchstart',e=>{if(scrollT&&!e.target.closest('#scr'))stopScroll()},{passive:true});
 async function keepAwake(){try{lock=await navigator.wakeLock.request('screen')}catch(e){}}
 function releaseLock(){try{lock&&lock.release()}catch(e){}lock=null}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('vSong').classList.contains('on'))keepAwake()});
