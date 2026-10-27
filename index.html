@@ -89,6 +89,7 @@ label{display:block;color:var(--mute);font-size:12px;letter-spacing:1.2px;text-t
 .song.cur b{color:var(--red)}
 .gh{color:var(--mute);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:16px 0 8px;border-bottom:1px solid var(--line)}
 #sBlock{padding-top:0;border:none}
+.dot{width:9px;height:9px;border-radius:50%;background:#2fbf5b;box-shadow:0 0 0 3px rgba(47,191,91,.18),0 0 8px rgba(47,191,91,.7);flex:none}
 .chk{width:26px;text-align:center;color:var(--red);font-weight:700;font-size:18px}
 audio{filter:sepia(.15)}
 </style>
@@ -227,7 +228,7 @@ function go(v){
 function row(s,i,extra,cls){
   return`<div class="song ${cls||''}">${i!=null?`<span class="n">${i}</span>`:''}
    <div class="t" onclick="${extra.click}"><b>${esc(s.title)||'Без названия'}</b><small>${esc(s.artist)}${s.bpm?' · '+esc(s.bpm)+' bpm':''}</small></div>
-   ${s.audio?'<span class="mute">♫</span>':''}${s.key?`<span class="key">${esc(s.k||s.key)}</span>`:''}${extra.tail||''}</div>`;
+   ${(s.text||'').trim()?'<span class="dot" title="Есть текст"></span>':''}${s.audio?'<span class="mute">♫</span>':''}${s.key?`<span class="key">${esc(s.k||s.key)}</span>`:''}${extra.tail||''}</div>`;
 }
 
 /* ---- БИБЛИОТЕКА ---- */
