@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f3efe9">
+<title>SETLIST</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3efe9;--fg:#1c1a19;--mute:#8d8781;--line:#e2dbd2;--red:#a8231f;--ch:#a8231f;
+ --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;--sans:Montserrat,-apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") fixed;color:var(--fg);font-family:var(--sans);font-size:15px}
+.glass{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 30px rgba(60,40,30,.10),inset 0 1px 0 #fff}
+button{font:inherit;color:inherit;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(60,40,30,.07),inset 0 1px 0 #fff;border-radius:999px;padding:8px 14px;cursor:pointer;font-size:14px}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.4}
+input,textarea{font:inherit;color:var(--fg);background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:14px;padding:11px 13px;width:100%;outline:none}
+input:focus,textarea:focus{border-color:#cfc6bb}
+textarea{min-height:45vh;font-family:ui-monospace,Menlo,monospace;font-size:14px;line-height:1.55}
+.view{display:none;padding:18px 18px 150px;max-width:720px;margin:0 auto}
+.view.on{display:block}
+header{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.logo{width:38px;height:38px;border-radius:50%;background:var(--fg);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+h1{font-family:var(--serif);font-size:30px;font-weight:600;flex:1;letter-spacing:.2px}
+.hero{text-align:center;margin:10px 0 18px}
+.big{font-family:var(--serif);color:var(--red);font-size:110px;line-height:.95;font-weight:500;letter-spacing:-2px}
+.hero .sub{font-family:var(--serif);font-size:24px;font-weight:600;margin-top:4px}
+.hero .sub2{font-family:var(--serif);color:var(--mute);font-size:17px}
+.search{margin-bottom:6px}
+.song{display:flex;align-items:center;gap:12px;padding:15px 2px;border-bottom:1px solid var(--line)}
+.song .n{color:var(--mute);min-width:22px;text-align:right;font-family:var(--serif);font-size:18px}
+.song .t{flex:1;min-width:0;cursor:pointer}
+.song .t b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.song .t small{color:var(--mute);font-size:13px}
+.key{color:var(--red);font-family:var(--serif);font-weight:700;font-size:20px;white-space:nowrap}
+.ic{padding:4px 5px;font-size:11px;border:none;background:none;box-shadow:none;color:var(--mute)}
+.mute{color:var(--mute)}
+.empty{color:var(--mute);text-align:center;padding:40px 0;font-family:var(--serif);font-size:19px}
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:100px;z-index:4;white-space:nowrap;padding:15px 34px;font-size:17px;color:var(--fg);font-family:var(--sans);font-weight:500;letter-spacing:.3px}
+.fab:active{transform:translateX(-50%) scale(.97)}
+.fab.low{bottom:24px}
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:5;width:min(calc(100% - 28px),520px);border-radius:28px;display:flex;padding:7px}
+.tabbar button{flex:1;background:none;border:none;box-shadow:none;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;font-size:12px;color:#555}
+.tabbar button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.6}
+.tabbar button.on{color:var(--red)}
+.bar{position:sticky;top:0;z-index:3;display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;align-items:center;padding:10px 18px;margin:-18px -18px 12px;background:rgba(243,239,233,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.bar::-webkit-scrollbar{display:none}
+.bar button{flex:none;padding:7px 11px;font-size:13px}
+#vSong .bar button{min-width:36px;padding:7px 9px}
+.bar .sp{flex:1}
+.lbl{color:var(--mute);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:18px 0 8px;border-bottom:1px solid var(--line)}
+.card{border-radius:22px;padding:18px;margin-bottom:12px;cursor:pointer}
+.card b{font-family:var(--serif);font-size:25px;font-weight:600;display:block;line-height:1.15}
+.card .meta{display:flex;justify-content:space-between;margin-top:6px}
+.card .meta .r{color:var(--red);font-family:var(--serif);font-size:19px;font-weight:700}
+.blk{border-radius:22px;padding:6px 16px 14px;margin-bottom:14px}
+.blk-h{display:flex;gap:2px;align-items:center;border-bottom:1px solid var(--line)}
+.blk-h input{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute);background:none;border:none;padding:12px 0;border-radius:0}
+.blk .song{padding:12px 0}
+.blk .song:last-of-type{border-bottom:none}
+.blk .add{width:100%;margin-top:10px;color:var(--red)}
+.ev-name{font-family:var(--serif);font-size:30px;font-weight:600;background:none;border:none;padding:4px 0;text-align:center;border-radius:0}
+#evDate{display:block;width:auto;margin:0 auto;text-align:center;background:none;border:none;color:var(--mute);font-family:var(--serif);font-size:18px;padding:2px 0 12px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+.btns{display:flex;gap:8px;margin:16px 0}.btns button{flex:1;padding:13px}
+.on-b{background:var(--fg);color:#fff;border-color:var(--fg)}
+.danger{color:var(--red)}
+#sTitle{font-family:var(--serif);font-size:34px;font-weight:600;line-height:1.1}
+#sMeta{color:var(--mute);margin:6px 0 16px}
+#sBody{line-height:1.3}
+.ln{margin:0 0 .35em;display:flex;flex-wrap:wrap;align-items:flex-end;min-height:1em}
+.sg{display:inline-flex;flex-direction:column;white-space:pre}
+.sg i{font-style:normal;color:var(--ch);font-weight:600;font-size:.82em;min-height:1.15em;padding-right:.3em}
+.hide-ch .sg i{display:none}
+.sec{color:var(--mute);font-size:.68em;letter-spacing:1.5px;text-transform:uppercase;margin:1.1em 0 .4em;border-bottom:1px solid var(--line);padding-bottom:.4em}
+.notes{color:var(--mute);border-left:2px solid var(--red);padding-left:12px;margin-bottom:16px;white-space:pre-wrap;font-family:var(--serif);font-size:18px}
+.nav{display:flex;gap:8px;margin-top:28px}.nav button{flex:1;padding:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif);font-size:18px;font-weight:600}
+label{display:block;color:var(--mute);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;margin:16px 0 6px}
+.hint{color:var(--mute);font-size:12px;margin-top:8px;line-height:1.6}
+.sheet{position:fixed;inset:0;z-index:10;display:none}
+.sheet.on{display:block}
+.sheet .bg{position:absolute;inset:0;background:rgba(40,30,25,.25);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet .pn{position:absolute;top:0;left:0;bottom:0;width:min(88vw,400px);background:rgba(246,242,236,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);display:flex;flex-direction:column;padding:16px;box-shadow:10px 0 40px rgba(0,0,0,.12)}
+.sheet .ls{overflow-y:auto;flex:1;margin-top:8px}
+.sheet .song{padding:12px 2px}
+.song.cur b{color:var(--red)}
+.gh{color:var(--mute);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:16px 0 8px;border-bottom:1px solid var(--line)}
+#sBlock{padding-top:0;border:none}
+.chk{width:26px;text-align:center;color:var(--red);font-weight:700;font-size:18px}
+audio{filter:sepia(.15)}
+</style>
+</head>
+<body>
+
+<!-- БИБЛИОТЕКА -->
+<div id="vLib" class="view">
+  <header><span class="logo">♪</span><h1>setlist</h1>
+    <button onclick="exportData()">⇩</button>
+    <button onclick="$('imp').click()">⇧</button>
+    <input type="file" id="imp" accept=".json" hidden onchange="importData(this)">
+  </header>
+  <input class="search" id="q" type="search" placeholder="Поиск песни или артиста" style="margin-top:12px" oninput="renderLib()">
+  <div class="lbl" id="libLbl">Репертуар</div><div id="lib"></div>
+  <button class="fab glass" onclick="openEdit(null)">+ песня</button>
+</div>
+
+<!-- ВЫСТУПЛЕНИЯ -->
+<div id="vEvents" class="view">
+  <header><span class="logo">♪</span><h1>Выступления</h1></header>
+  <div class="lbl">Мероприятия</div><div id="evs" style="margin-top:12px"></div>
+  <button class="fab glass" onclick="newEvent()">+ выступление</button>
+</div>
+
+<!-- ОДНО ВЫСТУПЛЕНИЕ -->
+<div id="vEvent" class="view">
+  <div class="bar"><button onclick="go('vEvents')">←</button><span class="sp"></span>
+    <button onclick="shareEvent(null)">Поделиться</button>
+    <button class="danger" onclick="delEvent()">Удалить</button>
+  </div>
+  <div class="hero" style="margin-bottom:6px"><div class="big" id="evN">00</div><div class="sub2" id="evSub">песен</div></div>
+  <input class="ev-name" id="evName" placeholder="Название мероприятия" oninput="evSet('name',this.value)">
+  <input type="date" id="evDate" onchange="evSet('date',this.value)" >
+  <div id="blocks"></div>
+  <div class="btns"><button onclick="addBlock()">+ Блок</button></div>
+  <button class="fab glass low" onclick="startEvent()" style="color:var(--red)">▶ начать</button>
+</div>
+
+<!-- ПРОСМОТР ПЕСНИ -->
+<div id="vSong" class="view">
+  <div class="bar">
+    <button onclick="back()">←</button>
+    <button onclick="openSeqSheet()">☰</button>
+    <button onclick="openEdit(cur)">✎</button>
+    <button onclick="tr(-1)">−½</button>
+    <span class="key" id="sKey">—</span>
+    <button onclick="tr(1)">+½</button>
+    <span class="sp"></span>
+    <button onclick="fs(-1)">A−</button>
+    <button onclick="fs(1)">A+</button>
+    <button id="bCh" onclick="toggleCh()">♪</button>
+    <button id="bScroll" onclick="toggleScroll()">▶</button>
+  </div>
+  <div id="sBlock" class="gh" style="margin-top:0"></div>
+  <div id="sTitle"></div>
+  <div id="sMeta"></div>
+  <div id="sNotes" class="notes"></div>
+  <audio id="sAudio" controls preload="none" style="width:100%;margin-bottom:14px;display:none"></audio>
+  <div id="sBody"></div>
+  <div class="nav"><button id="bPrev" onclick="step(-1)">←</button><button id="bNext" onclick="step(1)">→</button></div>
+</div>
+
+<!-- РЕДАКТОР -->
+<div id="vEdit" class="view">
+  <div class="bar"><button onclick="cancelEdit()">←</button><span class="sp"></span>
+    <button id="bDel" class="danger" onclick="delSong()">Удалить</button>
+    <button class="on-b" onclick="saveSong()">Сохранить</button>
+  </div>
+  <label>Название</label><input id="eTitle">
+  <label>Исполнитель</label><input id="eArtist">
+  <div class="row">
+    <div><label>Тональность</label><input id="eKey" placeholder="Am"></div>
+    <div><label>BPM</label><input id="eBpm" inputmode="numeric"></div>
+  </div>
+  <label>Аудио — имя файла в папке assets</label><input id="eAudio" placeholder="minus-let-it-be.mp3">
+  <label>Заметки (капо, вступление, кто поёт)</label><input id="eNotes">
+  <label>Текст с аккордами</label>
+  <textarea id="eText" placeholder="[Куплет]&#10;[Am]Строка текста [F]дальше&#10;[C]Ещё строка [G]"></textarea>
+  <div class="hint">Аккорд в скобках перед слогом: <b>[Am]</b>текст.<br>Строка из одного слова в скобках — заголовок: <b>[Припев]</b>.<br>Строка из аккордов: <b>[Am] [F] [C] [G]</b></div>
+</div>
+
+<!-- ОТКРЫТО ПО ССЫЛКЕ -->
+<div id="vShare" class="view">
+  <header><span class="logo">♪</span><h1>setlist</h1></header>
+  <div class="hero"><div class="big" id="shN">00</div><div class="sub" id="shTitle"></div><div class="sub2" id="shDate"></div></div>
+  <div id="shBody"></div>
+  <div class="btns"><button onclick="saveShared()">Сохранить себе</button><button onclick="leaveShare()">Мои песни</button></div>
+</div>
+
+<nav id="tabbar" class="tabbar glass">
+  <button data-v="vLib" onclick="go('vLib')"><svg viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>Песни</button>
+  <button data-v="vEvents" onclick="go('vEvents')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Выступления</button>
+</nav>
+
+<!-- ШТОРКА: порядок песен -->
+<div id="shSeq" class="sheet"><div class="bg" onclick="closeSheet('shSeq')"></div><div class="pn">
+  <input id="seqQ" placeholder="Поиск" oninput="renderSeqSheet()"><div class="ls" id="seqLs"></div></div></div>
+
+<!-- ШТОРКА: выбор песен в блок -->
+<div id="shPick" class="sheet"><div class="bg" onclick="closePick()"></div><div class="pn">
+  <div class="row" style="flex:none"><input id="pkQ" placeholder="Поиск" oninput="renderPick()" style="flex:3"><button onclick="closePick()" style="flex:1">Готово</button></div>
+  <div class="ls" id="pkLs"></div></div></div>
+
+<script>
+const SEED=[{"title": "Позови меня с собой", "artist": "Алла Пугачёва", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Лететь", "artist": "Амега (Антон Беляев)", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Катюша", "artist": "Анна Герман", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Надежда", "artist": "Анна Герман", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Седьмой лепесток", "artist": "HI-FI (Антон Токарев)", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Сансара", "artist": "Баста", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Мой рок-н-ролл", "artist": "Би-2", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Always a Woman", "artist": "Billy Joel", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Любите, девушки", "artist": "Браво", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Ресницы", "artist": "Братья Грим", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Вахтерам", "artist": "Бумбокс", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Красиво", "artist": "Валерий Меладзе", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Салют, Вера", "artist": "Валерий Меладзе", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Самба белого мотылька", "artist": "Валерий Меладзе", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Обернитесь", "artist": "Валерий Меладзе, Григорий Лепс", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Я то, что надо", "artist": "Валерий Сюткин", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Голая", "artist": "Градусы", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Режиссер", "artist": "Градусы", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Зима в сердце", "artist": "Гости из будущего", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Это всё, что останется", "artist": "ДДТ", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Держи", "artist": "Дима Билан", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Снимки", "artist": "Драгни", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Крылатые качели", "artist": "Евгений Крылатов", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Но зато мой друг лучше всех играет блюз", "artist": "Евгений Маргулис", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Скай", "artist": "Егор Сесарев", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Трава у дома", "artist": "Земляне", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Всё, что тебя касается", "artist": "Звери", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "До скорой встречи", "artist": "Звери", "key": "Gm", "bpm": "", "notes": "", "text": ""}, {"title": "Районы-кварталы", "artist": "Звери", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Старый рояль", "artist": "Игорь Скляр", "key": "G", "bpm": "", "notes": "", "text": ""}, {"title": "Ненавижу", "artist": "Иван Дорн", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Северное сияние", "artist": "Иван Дорн", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Школьное окно", "artist": "Иван Дорн", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Стыцамен", "artist": "Иван Дорн", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Наше лето (Яхта, парус)", "artist": "Валентин Стрыкало", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Тополиный пух", "artist": "Иванушки International", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Пускай", "artist": "Интонация", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Скажи как мне жить", "artist": "Интонация", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Маршрутка", "artist": "IOWA", "key": "C#m", "bpm": "", "notes": "", "text": ""}, {"title": "Улыбайся", "artist": "IOWA", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Одно и тоже", "artist": "IOWA", "key": "Dm", "bpm": "", "notes": "", "text": ""}, {"title": "Видели ночь", "artist": "Кино", "key": "G", "bpm": "", "notes": "", "text": ""}, {"title": "Восьмиклассница", "artist": "Кино", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Замыкая круг", "artist": "Крис Кельми", "key": "C", "bpm": "", "notes": "", "text": ""}, {"title": "Хали-гали", "artist": "Леприконсы", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "На сиреневой луне", "artist": "Леонид Агутин", "key": "C", "bpm": "", "notes": "", "text": ""}, {"title": "Хоп Хэй Лала Лэй", "artist": "Леонид Агутин", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Я буду всегда с тобой", "artist": "Леонид Агутин", "key": "Dm", "bpm": "", "notes": "но очень сложно", "text": ""}, {"title": "Конь", "artist": "Любэ", "key": "Dm", "bpm": "", "notes": "", "text": ""}, {"title": "Знаешь ли ты", "artist": "Максим", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Эхо тысячи вокзалов", "artist": "Мария Чайковская, Гуша Катушкин", "key": "Gm", "bpm": "", "notes": "", "text": ""}, {"title": "Абсолютно всё", "artist": "Мот & Бьянка", "key": "C#", "bpm": "", "notes": "", "text": ""}, {"title": "Владивосток 2000", "artist": "Мумий Тролль", "key": "Am", "bpm": "", "notes": "пока очень сложно", "text": ""}, {"title": "Невеста", "artist": "Мумий Тролль", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Луч солнца золотого", "artist": "Муслим Магомаев", "key": "E", "bpm": "", "notes": "", "text": ""}, {"title": "Лучший город земли", "artist": "Муслим Магомаев", "key": "A", "bpm": "", "notes": "", "text": ""}, {"title": "Маленькая страна", "artist": "Наташа Королёва", "key": "Bm", "bpm": "", "notes": "", "text": ""}, {"title": "Это здорово", "artist": "Николай Носков", "key": "Gm", "bpm": "", "notes": "", "text": ""}, {"title": "Есть только миг", "artist": "Олег Анофриев", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Как здорово", "artist": "Олег Митяев", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Apologize", "artist": "OneRepublic", "key": "Cm", "bpm": "", "notes": "", "text": ""}, {"title": "Кукушка", "artist": "Полина Гагарина", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Я так соскучился", "artist": "Порнофильмы", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "18 мне уже", "artist": "Руки Вверх!", "key": "F#m", "bpm": "", "notes": "", "text": ""}, {"title": "Он тебя целует", "artist": "Руки Вверх!", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Крошка моя", "artist": "Руки Вверх!", "key": "Gm", "bpm": "", "notes": "", "text": ""}, {"title": "Выхода нет", "artist": "Сплин", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Моё сердце", "artist": "Сплин", "key": "D", "bpm": "", "notes": "", "text": ""}, {"title": "Shape of My Heart", "artist": "Sting", "key": "F#m", "bpm": "", "notes": "", "text": ""}, {"title": "Чёрный кот", "artist": "Тамара Миансарова", "key": "Cm", "bpm": "", "notes": "", "text": ""}, {"title": "Let It Be", "artist": "The Beatles", "key": "G", "bpm": "", "notes": "", "text": ""}, {"title": "Yellow Submarine", "artist": "The Beatles", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Yesterday", "artist": "The Beatles", "key": "C", "bpm": "", "notes": "", "text": ""}, {"title": "Another Love", "artist": "Tom Odell", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Мы желаем счастья вам", "artist": "Цветы", "key": "Cm", "bpm": "", "notes": "", "text": ""}, {"title": "О любви", "artist": "Чиж & Co", "key": "F", "bpm": "", "notes": "", "text": ""}, {"title": "Ты не верь слезам", "artist": "Шура", "key": "Bm", "bpm": "", "notes": "", "text": ""}, {"title": "Детство", "artist": "Юрий Шатунов", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Нева", "artist": "5'nizza", "key": "Cm", "bpm": "", "notes": "", "text": ""}, {"title": "Солдат", "artist": "5'nizza", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Весна", "artist": "5'nizza", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Стрела", "artist": "5'nizza", "key": "Cm", "bpm": "", "notes": "", "text": ""}, {"title": "Помоги мне", "artist": "к/ф «Бриллиантовая рука»", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Песня про зайцев", "artist": "к/ф «Бриллиантовая рука»", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Разговор со счастьем", "artist": "к/ф «Иван Васильевич меняет профессию»", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Если у вас нету дома", "artist": "к/ф «Ирония судьбы»", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Где-то на белом свете", "artist": "к/ф «Кавказская пленница»", "key": "Dm", "bpm": "", "notes": "", "text": ""}, {"title": "Ваше благородие, госпожа удача", "artist": "к/ф «Белое солнце пустыни»", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "Бяки-буки", "artist": "м/ф «Бременские музыканты»", "key": "Dm", "bpm": "", "notes": "", "text": ""}, {"title": "Песня друзей", "artist": "м/ф «Бременские музыканты»", "key": "C", "bpm": "", "notes": "", "text": ""}, {"title": "Прекрасное далёко", "artist": "м/ф «Гостья из будущего»", "key": "Am", "bpm": "", "notes": "", "text": ""}, {"title": "День рождения только раз в году", "artist": "м/ф «День рождения»", "key": "", "bpm": "", "notes": "", "text": ""}, {"title": "Пустяк", "artist": "ROZHDEN", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Знаешь", "artist": "ROZHDEN", "key": "Fm", "bpm": "", "notes": "", "text": ""}, {"title": "Этажи", "artist": "Pianoбой, Бумбокс", "key": "F", "bpm": "", "notes": "", "text": ""}, {"title": "С неба до земли", "artist": "Quest Pistols", "key": "Em", "bpm": "", "notes": "", "text": ""}, {"title": "Ты так красива", "artist": "Quest Pistols", "key": "Cm", "bpm": "", "notes": "", "text": ""}];
+const LS='setlist_v1',LSE='setlist_events';
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const sk=s=>(s.artist+'|'+s.title).toLowerCase().trim();
+
+let songs=[],events=[];
+try{songs=JSON.parse(lsGet(LS))||[]}catch(e){}
+try{events=JSON.parse(lsGet(LSE))||[]}catch(e){}
+if(lsGet('setlist_seed')!=='1'){const have=new Set(songs.map(sk));SEED.forEach(s=>{if(!have.has(sk(s)))songs.push(s)});lsSet('setlist_seed','1')}
+songs.forEach(s=>{if(!s.id)s.id=uid()});
+function save(){lsSet(LS,JSON.stringify(songs));lsSet(LSE,JSON.stringify(events))}
+save();
+
+const byId=id=>songs.find(s=>s.id===id);
+const sorted=()=>songs.slice().sort((a,b)=>(a.artist+a.title).localeCompare(b.artist+b.title,'ru'));
+let cur=null,ctx=null,curEv=null,edit=null,shift=0,size=parseInt(lsGet('setlist_fs'))||20,hideCh=lsGet('setlist_ch')==='1',scrollT=null,lock=null,shared=null;
+
+function go(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  $(v).classList.add('on');scrollTo(0,0);
+  if(v!=='vSong'){stopScroll();releaseLock();$('sAudio').pause()}
+  const tb=['vLib','vEvents'].includes(v);$('tabbar').style.display=tb?'':'none';document.querySelectorAll('#tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='vLib')renderLib();
+  if(v==='vEvents')renderEvents();
+  if(v==='vEvent')renderEvent();
+}
+function row(s,i,extra,cls){
+  return`<div class="song ${cls||''}">${i!=null?`<span class="n">${i}</span>`:''}
+   <div class="t" onclick="${extra.click}"><b>${esc(s.title)||'Без названия'}</b><small>${esc(s.artist)}${s.bpm?' · '+esc(s.bpm)+' bpm':''}</small></div>
+   ${s.audio?'<span class="mute">♫</span>':''}${s.key?`<span class="key">${esc(s.k||s.key)}</span>`:''}${extra.tail||''}</div>`;
+}
+
+/* ---- БИБЛИОТЕКА ---- */
+function renderLib(){
+  const q=$('q').value.trim().toLowerCase();
+  const list=sorted().filter(s=>!q||(s.title+' '+s.artist+' '+(s.text||'')).toLowerCase().includes(q));
+  $('libLbl').textContent=q?('Найдено: '+list.length):('Репертуар · '+songs.length);
+  $('lib').innerHTML=list.length?list.map(s=>row(s,null,{click:`openSong('${s.id}',null)`})).join(''):'<div class="empty">Ничего нет</div>';
+}
+
+/* ---- ВЫСТУПЛЕНИЯ ---- */
+const pad=n=>String(n).padStart(2,'0');
+function plural(n){const a=n%10,b=n%100;return a===1&&b!==11?'песня':(a>=2&&a<=4&&(b<10||b>=20)?'песни':'песен')}
+const evCount=e=>e.blocks.reduce((n,b)=>n+b.songs.filter(byId).length,0);
+function fmtDate(d){if(!d)return'';const[y,m,dd]=d.split('-');return`${dd}.${m}.${y}`}
+function renderEvents(){
+  const l=events.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  $('evs').innerHTML=l.length?l.map(e=>`<div class="card glass" onclick="openEvent('${e.id}')"><b>${esc(e.name)||'Без названия'}</b>
+    <div class="meta"><span class="mute">${[fmtDate(e.date),e.blocks.length+' бл.'].filter(Boolean).join(' · ')}</span><span class="r">${evCount(e)} ${plural(evCount(e))}</span></div></div>`).join('')
+    :'<div class="empty">Создай первое выступление</div>';
+}
+function newEvent(){
+  const e={id:uid(),name:'',date:new Date().toISOString().slice(0,10),blocks:[{id:uid(),name:'Блок 1',songs:[]}]};
+  events.push(e);save();openEvent(e.id);setTimeout(()=>$('evName').focus(),50);
+}
+const getEv=()=>events.find(e=>e.id===curEv);
+function openEvent(id){curEv=id;go('vEvent')}
+function evSet(k,v){getEv()[k]=v;save()}
+function renderEvent(){
+  const e=getEv();if(!e)return go('vEvents');
+  const c=evCount(e);$('evN').textContent=pad(c);$('evSub').textContent=plural(c)+' · '+e.blocks.length+' бл.';
+  $('evName').value=e.name;$('evDate').value=e.date||'';
+  let n=0;
+  $('blocks').innerHTML=e.blocks.map((b,bi)=>`<div class="blk glass">
+    <div class="blk-h"><input value="${esc(b.name)}" oninput="blkSet(${bi},this.value)">
+      <button class="ic" onclick="shareEvent('${b.id}')" title="Поделиться блоком">↗</button>
+      <button class="ic" onclick="mvBlock(${bi},-1)">▲</button><button class="ic" onclick="mvBlock(${bi},1)">▼</button>
+      <button class="ic" onclick="delBlock(${bi})">✕</button></div>
+    ${b.songs.map((id,si)=>{const s=byId(id);if(!s)return'';n++;return row(s,n,{click:`openSong('${id}','${e.id}')`,
+      tail:`<button class="ic" onclick="mvSong(${bi},${si},-1)">▲</button><button class="ic" onclick="mvSong(${bi},${si},1)">▼</button><button class="ic" onclick="rmSong(${bi},${si})">✕</button>`})}).join('')}
+    <button class="add" onclick="openPick(${bi})">+ песни</button></div>`).join('');
+}
+function blkSet(bi,v){getEv().blocks[bi].name=v;save()}
+function addBlock(){const e=getEv();e.blocks.push({id:uid(),name:'Блок '+(e.blocks.length+1),songs:[]});save();renderEvent()}
+function delBlock(bi){const e=getEv();if(e.blocks[bi].songs.length&&!confirm('Удалить блок?'))return;e.blocks.splice(bi,1);save();renderEvent()}
+function mvBlock(bi,d){const b=getEv().blocks,j=bi+d;if(j<0||j>=b.length)return;[b[bi],b[j]]=[b[j],b[bi]];save();renderEvent()}
+function mvSong(bi,si,d){const e=getEv(),b=e.blocks[bi].songs,j=si+d;
+  if(j<0){if(bi>0){e.blocks[bi-1].songs.push(b.splice(si,1)[0])}}
+  else if(j>=b.length){if(bi<e.blocks.length-1){e.blocks[bi+1].songs.unshift(b.splice(si,1)[0])}}
+  else [b[si],b[j]]=[b[j],b[si]];
+  save();renderEvent()}
+function rmSong(bi,si){getEv().blocks[bi].songs.splice(si,1);save();renderEvent()}
+function delEvent(){if(!confirm('Удалить выступление?'))return;events=events.filter(e=>e.id!==curEv);save();go('vEvents')}
+function startEvent(){const sq=seqOf(curEv);if(!sq.length)return alert('Добавь песни в блоки');openSong(sq[0].id,curEv)}
+
+/* выбор песен */
+let pkBlock=null;
+function openPick(bi){pkBlock=bi;$('pkQ').value='';renderPick();$('shPick').classList.add('on')}
+function closePick(){$('shPick').classList.remove('on');renderEvent()}
+function renderPick(){
+  const q=$('pkQ').value.trim().toLowerCase(),b=getEv().blocks[pkBlock].songs;
+  $('pkLs').innerHTML=sorted().filter(s=>!q||(s.title+' '+s.artist).toLowerCase().includes(q)).map(s=>
+    row(s,null,{click:`togglePick('${s.id}')`,tail:`<span class="chk">${b.includes(s.id)?'✓':''}</span>`})).join('');
+}
+function togglePick(id){const b=getEv().blocks[pkBlock].songs,i=b.indexOf(id);i<0?b.push(id):b.splice(i,1);save();renderPick()}
+
+/* ---- ПОРЯДОК ДЛЯ ПРОСМОТРА ---- */
+function seqOf(evId){
+  if(!evId)return sorted().map(s=>({id:s.id,block:''}));
+  const e=events.find(x=>x.id===evId);if(!e)return[];
+  const out=[];e.blocks.forEach(b=>b.songs.forEach(id=>{if(byId(id))out.push({id,block:b.name})}));return out;
+}
+
+/* ---- ТРАНСПОНИРОВАНИЕ ---- */
+const SH=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const FL={Db:'C#',Eb:'D#',Gb:'F#',Ab:'G#',Bb:'A#',Cb:'B',Fb:'E','E#':'F','B#':'C',H:'B'};
+function note(n,d){n=FL[n]||n;const i=SH.indexOf(n);return i<0?n:SH[((i+d)%12+12)%12]}
+function trChord(c,d){if(!d)return c;return c.replace(/^([A-H][#b]?)([^/]*)(?:\/([A-H][#b]?))?$/,(m,r,q,b)=>note(r,d)+q+(b?'/'+note(b,d):''))}
+const isChord=s=>/^[A-H][#b]?(m|maj|min|dim|aug|sus|add|M)?[0-9]*(\([^)]*\))?[^\s]*$/.test(s);
+
+/* ---- ПРОСМОТР ---- */
+function openSong(id,evId){cur=id;ctx=evId;const s=byId(id);shift=s.shift||0;go('vSong');renderSong();keepAwake()}
+function back(){ctx?openEvent(ctx):go('vLib')}
+function renderSong(){
+  const s=byId(cur);if(!s)return back();
+  const sq=seqOf(ctx),pos=sq.findIndex(x=>x.id===cur);
+  $('sBlock').textContent=ctx&&pos>=0?`${sq[pos].block} · ${pos+1}/${sq.length}`:'';
+  $('sTitle').textContent=s.title||'Без названия';
+  $('sMeta').textContent=[s.artist,s.bpm?s.bpm+' bpm':''].filter(Boolean).join(' · ');
+  $('sNotes').textContent=s.notes||'';$('sNotes').style.display=s.notes?'':'none';
+  const au=$('sAudio');
+  if(s.audio){const src='assets/'+encodeURIComponent(s.audio);if(au.dataset.src!==src){au.pause();au.src=src;au.dataset.src=src}au.style.display=''}
+  else{au.pause();au.removeAttribute('src');au.dataset.src='';au.style.display='none'}
+  $('sKey').textContent=s.key?trChord(s.key,shift):(shift?(shift>0?'+':'')+shift:'—');
+  $('sBody').style.fontSize=size+'px';
+  $('sBody').classList.toggle('hide-ch',hideCh);$('bCh').classList.toggle('on-b',!hideCh);
+  $('sBody').innerHTML=(s.text||'').split('\n').map(line=>{
+    const t=line.trim(),sec=t.match(/^\[([^\]]+)\]$/);
+    if(sec&&!isChord(sec[1]))return`<div class="sec">${esc(sec[1])}</div>`;
+    if(!t)return'<div class="ln">&nbsp;</div>';
+    let out='',ch='';
+    for(const p of line.split(/(\[[^\]]+\])/)){
+      const m=p.match(/^\[([^\]]+)\]$/);
+      if(m){if(ch)out+=seg(ch,' ');ch=trChord(m[1],shift);continue}
+      if(p===''&&!ch)continue;out+=seg(ch,p);ch='';
+    }
+    if(ch)out+=seg(ch,' ');return`<div class="ln">${out}</div>`;
+  }).join('')||'<div class="mute" style="font-size:15px">Текста пока нет — жми ✎</div>';
+  const pv=sq[pos-1],nx=sq[pos+1];
+  $('bPrev').textContent=pv?'← '+byId(pv.id).title:'←';$('bPrev').disabled=!pv;
+  $('bNext').textContent=nx?byId(nx.id).title+' →':'→';$('bNext').disabled=!nx;
+}
+function seg(c,t){return`<span class="sg"><i>${esc(c)}</i><span>${esc(t)||' '}</span></span>`}
+function step(d){const sq=seqOf(ctx),p=sq.findIndex(x=>x.id===cur)+d;if(p>=0&&p<sq.length)openSong(sq[p].id,ctx)}
+function tr(d){shift=shift+d;if(shift>6)shift-=12;if(shift<-6)shift+=12;byId(cur).shift=shift;save();renderSong()}
+function fs(d){size=Math.max(12,Math.min(44,size+d*2));lsSet('setlist_fs',size);renderSong()}
+function toggleCh(){hideCh=!hideCh;lsSet('setlist_ch',hideCh?'1':'0');renderSong()}
+
+/* шторка ☰ */
+function openSeqSheet(){$('seqQ').value='';renderSeqSheet();$('shSeq').classList.add('on');const c=$('seqLs').querySelector('.cur');c&&c.scrollIntoView({block:'center'})}
+function closeSheet(id){$(id).classList.remove('on')}
+function renderSeqSheet(){
+  const q=$('seqQ').value.trim().toLowerCase();let last=null,h='';
+  seqOf(ctx).forEach((x,i)=>{const s=byId(x.id);if(q&&!(s.title+' '+s.artist).toLowerCase().includes(q))return;
+    if(ctx&&x.block!==last){h+=`<div class="gh">${esc(x.block)}</div>`;last=x.block}
+    h+=row(s,ctx?i+1:null,{click:`closeSheet('shSeq');openSong('${s.id}',${ctx?`'${ctx}'`:'null'})`},s.id===cur?'cur':'')});
+  $('seqLs').innerHTML=h;
+}
+
+/* автоскролл и экран */
+function toggleScroll(){scrollT?stopScroll():startScroll()}
+function startScroll(){$('bScroll').textContent='❚❚';$('bScroll').classList.add('on-b');
+  scrollT=setInterval(()=>{scrollBy(0,1);if(innerHeight+scrollY>=document.body.scrollHeight-2)stopScroll()},60)}
+function stopScroll(){clearInterval(scrollT);scrollT=null;const b=$('bScroll');b.textContent='▶';b.classList.remove('on-b')}
+async function keepAwake(){try{lock=await navigator.wakeLock.request('screen')}catch(e){}}
+function releaseLock(){try{lock&&lock.release()}catch(e){}lock=null}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&$('vSong').classList.contains('on'))keepAwake()});
+
+/* ---- РЕДАКТОР ---- */
+function openEdit(id){
+  edit=id;const s=id?byId(id):{};
+  $('eTitle').value=s.title||'';$('eArtist').value=s.artist||'';$('eKey').value=s.key||'';$('eBpm').value=s.bpm||'';
+  $('eAudio').value=s.audio||'';$('eNotes').value=s.notes||'';$('eText').value=s.text||'';
+  $('bDel').style.display=id?'':'none';go('vEdit');
+}
+function saveSong(){
+  const d={title:$('eTitle').value.trim(),artist:$('eArtist').value.trim(),key:$('eKey').value.trim(),bpm:$('eBpm').value.trim(),
+    audio:$('eAudio').value.trim(),notes:$('eNotes').value.trim(),text:$('eText').value};
+  if(!edit){const s=Object.assign({id:uid()},d);songs.push(s);save();openSong(s.id,null)}
+  else{Object.assign(byId(edit),d);save();openSong(edit,ctx)}
+}
+function cancelEdit(){edit?openSong(edit,ctx):go('vLib')}
+function delSong(){if(!confirm('Удалить песню из библиотеки?'))return;
+  songs=songs.filter(s=>s.id!==edit);events.forEach(e=>e.blocks.forEach(b=>b.songs=b.songs.filter(i=>i!==edit)));
+  save();ctx?openEvent(ctx):go('vLib')}
+
+/* ---- ССЫЛКА ---- */
+function b64e(str){const by=new TextEncoder().encode(str);let s='';for(let i=0;i<by.length;i++)s+=String.fromCharCode(by[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function b64d(s){s=s.replace(/-/g,'+').replace(/_/g,'/');const bin=atob(s),by=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)by[i]=bin.charCodeAt(i);return new TextDecoder().decode(by)}
+async function shareEvent(blockId){
+  const e=getEv();
+  const bl=e.blocks.filter(b=>!blockId||b.id===blockId);
+  const data={n:e.name,d:e.date,b:bl.map(b=>[b.name,b.songs.map(byId).filter(Boolean).map(s=>[s.title,s.artist,s.key?trChord(s.key,s.shift||0):''])])};
+  const url=location.origin+location.pathname+'#s='+b64e(JSON.stringify(data));
+  const title=(e.name||'Сетлист')+(blockId?' — '+bl[0].name:'');
+  try{if(navigator.share){await navigator.share({title,url});return}}catch(err){if(err.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(url);alert('Ссылка скопирована')}catch(err){prompt('Скопируй ссылку:',url)}
+}
+function checkHash(){
+  if(!location.hash.startsWith('#s='))return false;
+  try{shared=JSON.parse(b64d(location.hash.slice(3)))}catch(e){alert('Ссылка повреждена');leaveShare();return true}
+  $('shN').textContent=pad(shared.b.reduce((n,b)=>n+b[1].length,0));
+  $('shTitle').textContent=shared.n||'Сетлист';$('shDate').textContent=fmtDate(shared.d);
+  const mine=new Map(songs.map(s=>[sk(s),s.id]));let n=0;
+  $('shBody').innerHTML=shared.b.map(([bn,list])=>`<div class="gh">${esc(bn)}</div>`+list.map(([t,a,k])=>{n++;
+    const id=mine.get((a+'|'+t).toLowerCase().trim());
+    return row({title:t,artist:a,key:k},n,{click:id?`openSong('${id}',null)`:''})}).join('')).join('');
+  go('vShare');return true;
+}
+function leaveShare(){history.replaceState(null,'',location.pathname);go('vLib')}
+function saveShared(){
+  if(!shared)return;const map=new Map(songs.map(s=>[sk(s),s]));
+  const e={id:uid(),name:shared.n||'Сетлист',date:shared.d||'',blocks:shared.b.map(([bn,list])=>({id:uid(),name:bn,songs:list.map(([t,a,k])=>{
+    let s=map.get((a+'|'+t).toLowerCase().trim());if(!s){s={id:uid(),title:t,artist:a,key:k,bpm:'',notes:'',text:'',audio:''};songs.push(s);map.set(sk(s),s)}return s.id})}))};
+  events.push(e);save();history.replaceState(null,'',location.pathname);openEvent(e.id);
+}
+addEventListener('hashchange',checkHash);
+
+/* ---- ЭКСПОРТ / ИМПОРТ ---- */
+function exportData(){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify({songs,events},null,1)],{type:'application/json'}));
+  a.download='setlist.json';a.click();
+}
+function importData(inp){
+  const f=inp.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{let d=JSON.parse(r.result);if(Array.isArray(d))d={songs:d,events:[]};if(!Array.isArray(d.songs))throw 0;
+    d.songs.forEach(s=>{if(!s.id)s.id=uid()});
+    if(confirm('ОК — заменить всё данными из файла. Отмена — ничего не менять.')){songs=d.songs;events=d.events||[];save();go('vLib')}
+  }catch(e){alert('Файл не читается')}};
+  r.readAsText(f);inp.value='';
+}
+
+/* ---- ОБЩАЯ БАЗА ИЗ assets/setlist.json ---- */
+function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h+':'+s.length}
+async function syncRemote(){
+  try{
+    const r=await fetch('assets/setlist.json?'+Date.now(),{cache:'no-store'});if(!r.ok)return;
+    const txt=await r.text(),hh=hash(txt);if(hh===lsGet('setlist_remote'))return;
+    let d=JSON.parse(txt);if(Array.isArray(d))d={songs:d,events:[]};if(!Array.isArray(d.songs))return;
+    const loc=new Map(songs.map(s=>[s.id,s])),locK=new Map(songs.map(s=>[sk(s),s]));
+    d.songs.forEach(rs=>{const l=(rs.id&&loc.get(rs.id))||locK.get(sk(rs));
+      if(l){const sh=l.shift;Object.assign(l,rs);if(sh!=null&&rs.shift==null)l.shift=sh}else{if(!rs.id)rs.id=uid();songs.push(rs)}});
+    const le=new Map(events.map(e=>[e.id,e]));
+    (d.events||[]).forEach(re=>{const l=le.get(re.id);l?Object.assign(l,re):events.push(re)});
+    save();lsSet('setlist_remote',hh);
+    const v=(document.querySelector('.view.on')||{}).id;if(v==='vSong')renderSong();else if(v==='vLib')renderLib();else if(v==='vEvents')renderEvents();else if(v==='vEvent')renderEvent();
+  }catch(e){}
+}
+if(!checkHash())go('vLib');
+syncRemote();
+</script>
+</body>
+</html>
